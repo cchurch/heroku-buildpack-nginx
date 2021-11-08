@@ -70,6 +70,16 @@ if [[ ! -f "sigil" ]]; then
   tar xzf "${SIGIL_TARBALL}" && rm -rf "${SIGIL_TARBALL}"
 fi
 
+if [[ ! -e "nginx-${NGINX_VERSION}/openssl" ]]; then
+  cd "nginx-${NGINX_VERSION}"
+  mkdir openssl
+  cd openssl
+  wget https://www.openssl.org/source/openssl-1.1.1.tar.gz
+  tar -zxvf openssl-1.1.1.tar.gz 
+  pwd
+  cd ../..
+fi
+
 mkdir -p "$BUILD_DIR/sigil"
 cp -r sigil "$BUILD_DIR/sigil/"
 
@@ -92,6 +102,7 @@ if [[ ! -f "${CACHE_DIR}/bin/nginx" ]]; then
     --with-zlib=../zlib-${ZLIB_VERSION} \
     --with-pcre \
     --with-cc-opt="-O2 -static -static-libgcc" \
+    --with-openssl=./openssl/openssl-1.1.1 \
     --without-http_ssi_module \
     --without-http_userid_module \
     --without-http_access_module \
